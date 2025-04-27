@@ -1,0 +1,14 @@
+# Dépendances
+node_modules/
+.pnpm-store/
+
+# Fichiers de build
+dist/
+build/
+out/
+
+# Fichiers d'environnement
+.env
+.env.local
+.env.*.local
+
