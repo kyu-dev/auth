@@ -8,6 +8,9 @@ import client from './utils/db.js';
 const app = express();
 const PORT = 3000;
 
+// Middleware pour parser le corps des requêtes en JSON
+app.use(express.json());
+
 // Configuration de la session
 app.use(
   session({
