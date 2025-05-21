@@ -5,17 +5,6 @@ export const createPrompt = async (req, res) => {
     const { content, title, folder_id } = req.body;
     const { user_id } = req.user;
 
-    // ... existing code ...
-    if (
-      !req.body ||
-      !req.body.content ||
-      !req.body.title ||
-      !req.body.folder_id
-    ) {
-      return res.status(400).json({ error: 'Tous les champs sont requis.' });
-    }
-    // ... existing code ...
-
     const result = await client.query(
       'INSERT INTO prompts (user_id, content, title, folder_id) VALUES($1, $2, $3, $4) RETURNING *',
       [user_id, content, title, folder_id]
