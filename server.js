@@ -12,30 +12,10 @@ import ensureAuthenticated from './middleware/authMiddleware.js';
 const app = express();
 const PORT = 3000;
 
-// Configuration de Swagger
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'API Documentation',
-      version: '1.0.0',
-      description: "Documentation de l'API pour l'authentification",
-    },
-    servers: [
-      {
-        url: 'http://localhost:3000',
-      },
-    ],
-  },
-  apis: ['./routes/*.js'], // Chemin vers les fichiers de routes
-};
-
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-
 // Middleware
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Le port de ton front avec Vite
+    origin: 'http://localhost:5173', // Le port du front avec Vite
     credentials: true,
   })
 );
@@ -58,17 +38,14 @@ app.use('/auth', authRoutes);
 app.use('/prompt', promptRoutes);
 app.get('/api/me', ensureAuthenticated, (req, res) => {
   // req.user contient l'objet utilisateur désérialisé depuis la session
-  const { _id, username, email } = req.user;
+  const { id, username, email } = req.user;
 
   res.status(200).json({
-    id: _id,
+    id: id,
     username,
     email,
   });
 });
-
-// Route pour la documentation Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(PORT, () => {
   console.log('🚀 Serveur en écoute sur le port 3000 !');

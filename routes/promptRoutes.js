@@ -1,8 +1,8 @@
 import express from 'express';
-//import { hello } from '../controller/promptController.js';
+import { createPrompt } from '../controller/promptController.js';
 
 const router = express.Router();
 
-//router.get('/hello', hello);
+router.post('/creat', createPrompt);
 
 export default router;
