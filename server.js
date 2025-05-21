@@ -3,9 +3,11 @@ import session from 'express-session';
 import passport from 'passport';
 import './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
+import promptRoutes from './routes/promptRoutes.js';
 import cors from 'cors';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import ensureAuthenticated from './middleware/authMiddleware.js';
 
 const app = express();
 const PORT = 3000;
@@ -53,6 +55,17 @@ app.use(passport.session());
 
 //routes
 app.use('/auth', authRoutes);
+app.use('/prompt', promptRoutes);
+app.get('/api/me', ensureAuthenticated, (req, res) => {
+  // req.user contient l'objet utilisateur désérialisé depuis la session
+  const { _id, username, email } = req.user;
+
+  res.status(200).json({
+    id: _id,
+    username,
+    email,
+  });
+});
 
 // Route pour la documentation Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
