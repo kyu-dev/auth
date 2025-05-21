@@ -3,7 +3,10 @@ import client from '../utils/db.js';
 export const createPrompt = async (req, res) => {
   try {
     const { content, title, folder_id } = req.body;
-    const { user_id } = req.user;
+    const user_id = req.user.id;
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Utilisateur non authentifié.' });
+    }
 
     const result = await client.query(
       'INSERT INTO prompts (user_id, content, title, folder_id) VALUES($1, $2, $3, $4) RETURNING *',
