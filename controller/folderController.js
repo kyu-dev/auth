@@ -47,3 +47,26 @@ export const editFolder = async (req, res) => {
     res.status(500).json({ message: "Une erreur s'est produit" });
   }
 };
+
+export const deleteFolder = async (req, res) => {
+  const user_id = req.user.id;
+  const { id } = req.body;
+  try {
+    const result = await client.query(
+      'DELETE FROM folders WHERE id= $1 AND user_id = $2 RETURNING *;',
+      [id, user_id]
+    );
+    if (result.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: 'folder introuvable ou accès interdit 🕵️' });
+    }
+
+    res
+      .status(200)
+      .json({ message: 'folder supprimé ✅', deleted: result.rows[0] });
+  } catch (err) {
+    console.error('erreur lors de la supréssion du folder', err);
+    res.status(500).json({ message: 'Une erreur est survenue.' });
+  }
+};
