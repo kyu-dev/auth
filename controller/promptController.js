@@ -40,3 +40,24 @@ export const getPrompt = async (req, res) => {
     res.status(500).send('Une erreur est survenue.');
   }
 };
+
+export const editPrompt = async (req, res) => {
+  const user_id = req.user.id;
+  const { title, content, folder_id, id } = req.body;
+  try {
+    const result = await client.query(
+      'UPDATE prompts SET title = $1, content = $2, folder_id = $3 WHERE id = $4 AND user_id = $5 RETURNING *;',
+      [title, content, folder_id, id, user_id]
+    );
+
+    if (result.rows.lenth === 0) {
+      return res
+        .status(404)
+        .json({ message: 'Prompt introuvable ou accès interdit 🕵️‍♀️' });
+    }
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error('Erreur lors de la modification du prompt', err);
+    res.status(500).send('Une erreur est survenue.');
+  }
+};
