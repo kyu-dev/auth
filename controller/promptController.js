@@ -4,9 +4,6 @@ export const createPrompt = async (req, res) => {
   try {
     const { content, title, folder_id } = req.body;
     const user_id = req.user.id;
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ error: 'Utilisateur non authentifié.' });
-    }
 
     const result = await client.query(
       'INSERT INTO prompts (user_id, content, title, folder_id) VALUES($1, $2, $3, $4) RETURNING *',
@@ -21,7 +18,7 @@ export const createPrompt = async (req, res) => {
     });
   } catch (err) {
     console.error('Erreur lors de la création du prompt:', err);
-    res.status(500).send('Une erreur est survenue.');
+    res.status(500).json({ message: 'Une erreur est survenue.' });
   }
 };
 
@@ -34,10 +31,10 @@ export const getPrompt = async (req, res) => {
       [user_id]
     );
 
-    res.status(200).json(result.rows); // C’est ici que tu dois renvoyer les données
+    res.status(200).json(result.rows); // C'est ici que tu dois renvoyer les données
   } catch (err) {
     console.error('Erreur lors de la récupération des prompts', err);
-    res.status(500).send('Une erreur est survenue.');
+    res.status(500).json({ message: 'Une erreur est survenue.' });
   }
 };
 
@@ -58,7 +55,7 @@ export const editPrompt = async (req, res) => {
     res.status(200).json(result.rows[0]);
   } catch (err) {
     console.error('Erreur lors de la modification du prompt', err);
-    res.status(500).send('Une erreur est survenue.');
+    res.status(500).json({ message: 'Une erreur est survenue.' });
   }
 };
 
@@ -81,6 +78,6 @@ export const deletePrompt = async (req, res) => {
       .json({ message: 'Prompt supprimé ✅', deleted: result.rows[0] });
   } catch (err) {
     console.error('erreur lors de la supréssion du prompt', err);
-    res.status(500).send('Une erreur est survenue.');
+    res.status(500).json({ message: 'Une erreur est survenue.' });
   }
 };

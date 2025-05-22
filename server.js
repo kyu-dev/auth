@@ -4,11 +4,8 @@ import passport from 'passport';
 import './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import promptRoutes from './routes/promptRoutes.js';
+import folderRoutes from './routes/folderRoutes.js';
 import cors from 'cors';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import ensureAuthenticated from './middleware/authMiddleware.js';
-
 const app = express();
 const PORT = 3000;
 
@@ -36,16 +33,7 @@ app.use(passport.session());
 //routes
 app.use('/auth', authRoutes);
 app.use('/prompt', promptRoutes);
-app.get('/api/me', ensureAuthenticated, (req, res) => {
-  // req.user contient l'objet utilisateur désérialisé depuis la session
-  const { id, username, email } = req.user;
-
-  res.status(200).json({
-    id: id,
-    username,
-    email,
-  });
-});
+app.use('/folder', folderRoutes);
 
 app.listen(PORT, () => {
   console.log('🚀 Serveur en écoute sur le port 3000 !');
