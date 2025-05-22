@@ -21,6 +21,22 @@ export const createPrompt = async (req, res) => {
     });
   } catch (err) {
     console.error('Erreur lors de la création du prompt:', err);
-    res.status(500).json({ error: 'Une erreur est survenue.' });
+    res.status(500).send('Une erreur est survenue.');
+  }
+};
+
+export const getPrompt = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+
+    const result = await client.query(
+      'SELECT * FROM prompts WHERE user_id = $1',
+      [user_id]
+    );
+
+    res.status(200).json(result.rows); // C’est ici que tu dois renvoyer les données
+  } catch (err) {
+    console.error('Erreur lors de la récupération des prompts', err);
+    res.status(500).send('Une erreur est survenue.');
   }
 };
