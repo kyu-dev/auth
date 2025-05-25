@@ -2,15 +2,15 @@ import bcrypt from 'bcrypt';
 import client from '../utils/db.js';
 
 export const loginUser = (req, res) => {
-  res.send('Connexion réuissie !');
+  res.json({ message: 'Connexion réuissie !' });
 };
 
 export const logoutUser = (req, res) => {
   req.logout((err) => {
     if (err) {
-      return res.send('Erreur lors de la déconnexion.');
+      return res.json({ message: 'Erreur lors de la déconnexion.' });
     }
-    res.send('Déconnexion réussie.');
+    res.json({ message: 'Déconnexion réussie.' });
   });
 };
 
