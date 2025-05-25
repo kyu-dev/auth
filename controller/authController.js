@@ -4,6 +4,7 @@ import client from '../utils/db.js';
 export const loginUser = (req, res) => {
   res.json({ message: 'Connexion réuissie !' });
 };
+//test
 
 export const logoutUser = (req, res) => {
   req.logout((err) => {
